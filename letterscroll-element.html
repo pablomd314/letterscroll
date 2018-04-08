@@ -28,6 +28,11 @@
         };
       }
 
+      ::-webkit-scrollbar { 
+        display: none; 
+      }
+
+
       #scroller {
         position: absolute; width: 10%; height: 100%;
         top: 0; right: 0;
@@ -47,7 +52,7 @@
       }
 
       #inner {
-        height: 100%; overflow-y: scroll; width: auto; 
+        height: 100%; overflow-y: scroll; width: auto;
         @apply --inner-mixin;
       }
       
