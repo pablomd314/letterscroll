@@ -14,7 +14,25 @@ A simple scroller with letters on the side.
 ```
 -->
 ```html
-<letterscroll-element></letterscroll-element>
+<letterscroll-element>
+	<div class="item" slot="child" value="A">A</div>
+  
+    <div class="item" slot="child" value="Ab">Ab</div>
+  
+    <div class="item" slot="child" value="B">B</div>
+  
+    <div class="item" slot="child" value="Bb">Bb</div>
+  
+    <div class="item" slot="child" value="C">C</div>
+  
+    <div class="item" slot="child" value="Cb">Cb</div>
+  
+    <div class="item" slot="child" value="D">D</div>
+  
+    <div class="item" slot="child" value="Db">Db</div>
+  
+    <div class="item" slot="child" value="E">E</div>
+</letterscroll-element>
 ```
 
 ## Install the Polymer-CLI
