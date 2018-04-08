@@ -1,0 +1,123 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="letterscroll-child-element">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        display: block;
+        width: 300px;
+        height: 500px;
+        border: 1px solid black;
+      }
+
+      .item {
+        width: 100%; height: 100px;
+        border: 1px solid black;
+        box-sizing: border-box;
+      }
+
+      #scroller {
+        position: absolute; width: 30px;
+        height: 500px; background: red;
+        top: 0; right: 2px;
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
+      }
+
+      #inner {
+        height: 100%; overflow-y: scroll;
+        width: 100%; 
+        /*scroll-behavior: smooth;*/
+      }
+      
+      .letter {
+        background: white;
+        width: 25px; height: 25px;
+        text-align: center;
+        margin: 2px; line-height: 25px;
+        touch-action: none;
+      }
+
+    </style>
+    <div id="scroller" on-touchmove="_handleTouchMove">
+      <template is="dom-repeat" items={{firstLetters(data)}}>
+        <div class="letter" on-track="_letterTap" >{{item}}</div>
+      </template>
+    </div>
+    <div id="inner">
+      <template is="dom-repeat" items="{{data}}">
+        <div class="item">{{item.name}}</div>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * `letterscroll-child-element`
+     * A simple scroller with letters on the side.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class LetterscrollElement extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'letterscroll-child-element'; }
+      static get properties() {
+        return {
+          data: {
+            type: Array,
+            value: [{"name": "A"},{"name": "Ab"},{"name": "B"},{"name": "Bb"}, {"name": "C"},{"name": "Cb"},{"name": "D"},{"name": "Db"},{"name": "E"},{"name": "Eb"},{"name": "F"},{"name": "Fb"},{"name": "G"},{"name": "H"}]
+          },
+          letterMap: {
+            type: Object,
+            value: {}
+          },
+          currentLetter: {
+            type: String,
+            value: ""
+          }
+        };
+      }
+
+      _handleTouchMove(e) {
+        e.preventDefault();
+      }
+
+      unique(a) {
+        var seen = {};
+        var out = [];
+        var len = a.length;
+        var j = 0;
+        for(var i = 0; i < len; i++) {
+           var item = a[i];
+           if(seen[item] !== 1) {
+              seen[item] = 1;
+              out[j++] = item;
+              this.letterMap[item] = i;
+           }
+        }
+        console.log(this.letterMap);
+        return out;
+      }
+
+      firstLetters(data) {
+        return this.unique(data.map(x => x.name[0]));
+      }
+
+      _letterTap(e) {
+        let h = e.detail.hover();
+        let letter = (h.innerText);
+        if (h.className === "letter" && letter !== this.currentLetter) {
+          let idx = (this.letterMap[letter]);
+          let inner = this.$.inner;
+          let el = inner.children[idx];
+          inner.scrollTop = el.offsetTop;
+          this.currentLetter = letter;
+        }
+      }
+    }
+
+    window.customElements.define(LetterscrollElement.is, LetterscrollElement);
+  </script>
+</dom-module>

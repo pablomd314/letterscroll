@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>letterscroll-element demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <!-- <link rel="import" href="/bower_components/polymer/lib/elements/custom-style.html"> -->
+    <link rel="import" href="../letterscroll-element.html">
+    <!-- <link rel="import" href="../../shadycss/apply-shim.html"> -->
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+        /*.item {
+          border: 1px solid black;
+          box-sizing: border-box;
+          display: block;
+          height: 200px;
+        }*/
+        letterscroll-element {
+          /*width: 300px;*/
+          /*--letter-mixin: {
+            background: blue;
+            border-radius: 10px;
+            color: white;
+          };*/
+        }
+      </style>
+      
+    </custom-style>
+    <!-- <custom-style>
+      
+        
+
+    </custom-style> -->
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic letterscroll-element demo</h3>
+      <demo-snippet>
+        <template>
+          <letterscroll-element>
+            <div class="item" slot="child" value="A">A</div>
+          
+            <div class="item" slot="child" value="Ab">Ab</div>
+          
+            <div class="item" slot="child" value="B">B</div>
+          
+            <div class="item" slot="child" value="Bb">Bb</div>
+          
+            <div class="item" slot="child" value="C">C</div>
+          
+            <div class="item" slot="child" value="Cb">Cb</div>
+          
+            <div class="item" slot="child" value="D">D</div>
+          
+            <div class="item" slot="child" value="Db">Db</div>
+          
+            <div class="item" slot="child" value="E">E</div>
+          
+            <div class="item" slot="child" value="Eb">Eb</div>
+          
+            <div class="item" slot="child" value="F">F</div>
+          
+            <div class="item" slot="child" value="Fb">Fb</div>
+          
+            <div class="item" slot="child" value="G">G</div>
+          
+            <div class="item" slot="child" value="H">H</div>
+          </letterscroll-element>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,160 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../shadycss/apply-shim.html">
+<dom-module id="letterscroll-element">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        display: block;
+        width: 300px;
+        height: 500px;
+        --scroller-mixin: {
+          background: gray;
+          width: 30px; height: 400px; 
+          border-radius: 2px;
+          top: 50px; bottom: 50px; right: 5px;
+        };
+        --letter-mixin: {
+          background: white;
+          border-radius: 50%;
+          height: 25px;
+          width: 25px;
+          line-height: 25px;
+          margin: 2px 0px;
+        };
+        --inner-mixin: {
+
+        };
+      }
+
+      #scroller {
+        position: absolute; width: 10%; height: 100%;
+        top: 0; right: 0;
+        
+        display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
+        
+        @apply --scroller-mixin;
+      }
+
+      .letter {
+        text-align: center;
+        width: 80%;
+        touch-action: none;
+
+        @apply --letter-mixin;
+      }
+
+      #inner {
+        height: 100%; overflow-y: scroll; width: auto; 
+        @apply --inner-mixin;
+      }
+      
+      ::slotted(*) {
+        width: 100%; height: auto;
+        border: 1px solid black;
+        box-sizing: border-box;
+        height: 20%; background: lightblue;
+      } 
+
+    </style>
+    <div id="scroller" on-touchmove="_handleTouchMove">
+      <template is="dom-repeat" items={{firstLetters(data)}}>
+        <div class="letter" on-track="_letterTm" on-touchstart="_letterTap" on-mousedown="_letterTap">{{item}}</div>
+      </template>
+    </div>
+    <div id="inner">
+      <slot name="child" id="child-slot" on-slotchange="updateSlot"></slot>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * `letterscroll-element`
+     * A simple scroller with letters on the side.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class LetterscrollElement extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'letterscroll-element'; }
+      static get properties() {
+        return {
+          data: {
+            type: Array,
+            value: []
+          },
+          letterMap: {
+            type: Object,
+            value: {}
+          },
+          currentLetter: {
+            type: String,
+            value: ""
+          }
+        };
+      }
+
+
+      updateSlot(e) {
+        console.log(e.target.assignedNodes());
+        this.set('data',e.target.assignedNodes().map(x => ({"name": x.getAttribute('value')}) ));
+      }
+
+      _handleTouchMove(e) {
+        e.preventDefault();
+      }
+
+      unique(a) {
+        var seen = {};
+        var out = [];
+        var len = a.length;
+        var j = 0;
+        for(var i = 0; i < len; i++) {
+           var item = a[i];
+           if(seen[item] !== 1) {
+              seen[item] = 1;
+              out[j++] = item;
+              this.letterMap[item] = i;
+           }
+        }
+        console.log(this.letterMap);
+        return out;
+      }
+
+      firstLetters(data) {
+        return this.unique(data.map(x => x.name[0]));
+      }
+
+      _processLetterEvent(h)
+      {
+        if (h === null) {
+          return;
+        }
+        let letter = (h.innerText);
+        if (h.className === "letter" && letter !== this.currentLetter) {
+          let idx = (this.letterMap[letter]);
+          let inner = this.$.inner;
+          let el = this.children[idx];
+          inner.scrollTop = el.offsetTop;
+          this.currentLetter = letter;
+        }
+      }
+
+      _letterTap(e) {
+        let h = e.target;
+        this._processLetterEvent(h);
+      }
+
+      _letterTm(e) {
+        let h = e.detail.hover();
+        this._processLetterEvent(h);
+      }
+
+    }
+
+    window.customElements.define(LetterscrollElement.is, LetterscrollElement);
+  </script>
+</dom-module>
